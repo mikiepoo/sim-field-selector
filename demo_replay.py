@@ -4,6 +4,7 @@ import ctypes
 import hashlib
 import json
 import os
+import sys
 import tempfile
 import urllib.request
 import uuid
@@ -25,14 +26,23 @@ def load_download_url(resource_dir: Path) -> str:
     configured = os.environ.get("SIM_FIELD_SELECTOR_REPLAY_URL", "").strip()
     if configured:
         return configured
-    config_path = resource_dir / "demo_replay.json"
-    if not config_path.exists():
-        return ""
-    try:
-        payload = json.loads(config_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return ""
-    return str(payload.get("url") or "").strip()
+    executable_dir = Path(sys.executable).resolve().parent
+    candidates = [
+        executable_dir / "demo_replay.json",
+        Path(resource_dir) / "demo_replay.json",
+        executable_dir / "_internal" / "demo_replay.json",
+    ]
+    for config_path in dict.fromkeys(candidates):
+        if not config_path.exists():
+            continue
+        try:
+            payload = json.loads(config_path.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        configured = str(payload.get("url") or "").strip()
+        if configured:
+            return configured
+    return ""
 
 
 def default_replay_destination() -> Path:

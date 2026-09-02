@@ -2,6 +2,7 @@ import hashlib
 import io
 import tempfile
 import unittest
+import json
 from pathlib import Path
 from unittest.mock import patch
 
@@ -28,6 +29,16 @@ class FakeResponse:
 
 
 class DemoReplayTests(unittest.TestCase):
+    def test_download_url_falls_back_to_packaged_internal_config(self):
+        url = "https://estesl2l.com/private/testapiqslice.rpy"
+        with tempfile.TemporaryDirectory() as temp_dir:
+            executable = Path(temp_dir) / "SimFieldSelector.exe"
+            internal = Path(temp_dir) / "_internal"
+            internal.mkdir()
+            (internal / "demo_replay.json").write_text(json.dumps({"url": url}), encoding="utf-8")
+            with patch.object(demo_replay.sys, "executable", str(executable)):
+                self.assertEqual(demo_replay.load_download_url(Path(temp_dir) / "elsewhere"), url)
+
     def test_download_verifies_and_atomically_installs_replay(self):
         payload = b"test replay payload"
         expected = hashlib.sha256(payload).hexdigest().upper()

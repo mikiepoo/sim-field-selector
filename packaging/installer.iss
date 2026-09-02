@@ -1,10 +1,11 @@
 #define MyAppName "Sim Field Selector"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Sim Field Selector"
 #define ProjectRoot AddBackslash(SourcePath) + ".."
 #define AppSource ProjectRoot + "\dist\SimFieldSelector"
 #include ProjectRoot + "\build\demo_config\installer_defines.iss"
 #define DemoConfigSource ProjectRoot + "\build\demo_config\demo_replay_private.json"
+#define BlankDemoConfigSource ProjectRoot + "\build\demo_config\demo_replay.json"
 
 [Setup]
 AppId={{76DFEE6F-9583-4D02-912E-D29025323CBD}
@@ -35,8 +36,9 @@ Name: "demoreplay"; Description: "Enable the downloadable iRacing demo replay"; 
 [Files]
 Source: "{#AppSource}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#ProjectRoot}\packaging\DEMO-README.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BlankDemoConfigSource}"; DestDir: "{app}"; DestName: "demo_replay.json"; Flags: ignoreversion
 #if DemoAvailable
-Source: "{#DemoConfigSource}"; DestDir: "{app}\_internal"; DestName: "demo_replay.json"; Tasks: demoreplay; Flags: ignoreversion
+Source: "{#DemoConfigSource}"; DestDir: "{app}"; DestName: "demo_replay.json"; Tasks: demoreplay; Flags: ignoreversion
 #endif
 
 [Icons]
