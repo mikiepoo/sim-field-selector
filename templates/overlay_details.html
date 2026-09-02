@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Qualifying Field Breakdown</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='details.css') }}">
+</head>
+<body>
+  <main class="details-shell">
+    <header>
+      <div>
+        <p class="kicker">Live qualifying analysis</p>
+        <h1>Field Breakdown</h1>
+        <p id="track-name" class="track-name">Waiting for iRacing</p>
+      </div>
+      <div class="header-status">
+        <div class="clock"><span>Total drivers</span><strong id="total-drivers">0</strong></div>
+        <div class="clock"><span>Time remaining</span><strong id="time-remaining">--:--</strong></div>
+        <div id="session-state" class="session-state waiting"><span></span><strong>WAITING FOR IRACING</strong></div>
+      </div>
+    </header>
+
+    <section class="hero-grid" aria-live="polite">
+      <article class="hero-card open-charter"><span>Open-Charter projected in</span><strong id="oc-projection">0 / 0</strong><small id="oc-entered">0 entered</small></article>
+      <article class="hero-card"><span>Guaranteed positions used</span><strong id="oc-guaranteed">0 / 10</strong><small>Fastest entered Open-Charters</small></article>
+      <article class="hero-card"><span>Open-Charters through final pool</span><strong id="oc-final-pool">0</strong><small>Beyond the guarantee</small></article>
+      <article class="hero-card open"><span>Open drivers through final pool</span><strong id="open-final-pool">0</strong><small>Speed-based transfer positions</small></article>
+      <article class="hero-card out"><span>Open-Charter currently out</span><strong id="oc-out">0</strong><small>Would not transfer right now</small></article>
+    </section>
+
+    <section class="allocation">
+      <article><span class="step">1</span><div><small>Charter allocation</small><strong id="charter-allocation">0 locked · 0 missing</strong></div></article>
+      <article><span class="step">2</span><div><small>Open-Charter guarantee</small><strong id="guarantee-allocation">0 of 10 filled</strong></div></article>
+      <article><span class="step">3</span><div><small>Final shared pool</small><strong id="pool-allocation">0 positions filled</strong></div></article>
+      <article><span class="step">4</span><div><small>Projected field</small><strong id="field-allocation">0 of 40</strong></div></article>
+    </section>
+
+    <section class="bubble-panel" aria-label="Bubble battle">
+      <div><span>Last final-pool transfer</span><strong id="last-in">Waiting for times</strong></div>
+      <div class="bubble-gap"><span>Gap</span><strong id="bubble-gap">--</strong></div>
+      <div><span>First driver out</span><strong id="first-out">Waiting for times</strong></div>
+    </section>
+
+    <section class="list-grid">
+      <article class="driver-panel charters">
+        <div class="panel-heading"><div><span>Locked into projected field</span><h2>Charters In Session</h2></div><strong id="charter-count">0</strong></div>
+        <div id="charter-list" class="driver-list"></div>
+      </article>
+      <article class="driver-panel guaranteed">
+        <div class="panel-heading"><div><span>Guaranteed</span><h2>Open-Charter Positions</h2></div><strong id="guaranteed-count">0</strong></div>
+        <div id="guaranteed-list" class="driver-list"></div>
+      </article>
+      <article class="driver-panel transfers">
+        <div class="panel-heading"><div><span>By qualifying speed</span><h2>Final Shared Pool</h2></div><strong id="transfer-count">0</strong></div>
+        <div id="transfer-list" class="driver-list"></div>
+      </article>
+      <article class="driver-panel dnq">
+        <div class="panel-heading"><div><span>Below transfer positions</span><h2>Currently Out</h2></div><strong id="out-count">0</strong></div>
+        <div id="out-list" class="driver-list"></div>
+      </article>
+    </section>
+
+    <section class="explanation">
+      <div><span class="swatch charter"></span><strong>Charter</strong> locks into the field when entered.</div>
+      <div><span class="swatch open-charter"></span><strong>Open-Charter</strong> can transfer through its guarantee or the final shared pool.</div>
+      <div><span class="swatch open"></span><strong>Open</strong> competes for the final shared pool.</div>
+      <div id="vacancy-note">Missing Charter positions increase the final shared pool.</div>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='details.js') }}"></script>
+</body>
+</html>

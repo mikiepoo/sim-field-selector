@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sim Field Selector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">TotalEnergies Quartz Engine Oil</p>
+      <h1>Sim Field Selector</h1>
+      <p class="intro">Live Charter, Open-Charter, and Open qualifying projection.</p>
+    </div>
+    <span class="local-mode">Local iRacing SDK</span>
+  </header>
+
+  <main>
+    <section class="panel live-panel">
+      <div id="live-state" class="live-state waiting">
+        <span class="live-dot"></span>
+        <div><strong>Waiting for the iRacing simulator</strong><small>Run iRacing on this computer and join the session.</small></div>
+      </div>
+
+      <div id="demo-help" class="demo-help">
+        <div>
+          <strong>Demo replay</strong>
+          <span id="demo-replay-message">Checking whether the demo replay is installed...</span>
+        </div>
+        <button id="download-demo-replay" class="button primary" type="button" hidden>Download Demo Replay</button>
+      </div>
+
+      <div class="live-toolbar">
+        <div class="editor-actions">
+          <button id="edit-roster" class="button secondary" type="button">Edit Driver Lists</button>
+          <button id="edit-tracks" class="button secondary" type="button">Edit Track List</button>
+        </div>
+        <div class="overlay-actions">
+          <a id="overlay-link" class="button secondary" href="/overlay" target="_blank" rel="noopener">Open Broadcast Overlay</a>
+          <a id="overlay-details-link" class="button secondary" href="/overlay/details" target="_blank" rel="noopener">Open Live Breakdown</a>
+        </div>
+      </div>
+
+      <div class="rule-fields">
+        <label>Total field size <input id="field-size" type="number" min="40" max="43" value="40"></label>
+        <div class="derived-rule"><span>Open-Charter guarantees</span><strong id="derived-oc-spots">10</strong></div>
+        <div class="derived-rule"><span>Base final shared spots</span><strong>5</strong></div>
+        <div class="derived-rule"><span>Track pit stalls</span><strong id="pit-stall-count">Not stored</strong></div>
+      </div>
+      <p id="error" class="error" role="alert"></p>
+    </section>
+
+    <section id="results" class="panel results" hidden>
+      <div class="result-heading">
+        <div><p class="eyebrow">Live calculation</p><h2>Field Results</h2></div>
+        <div class="result-actions">
+          <button id="finalize" class="button primary" type="button">Finalize Field</button>
+          <button id="copy" class="button secondary" type="button">Copy Results</button>
+        </div>
+      </div>
+      <div id="summary" class="summary"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Q</th><th>Car</th><th>Driver</th><th>Best lap</th><th>Charter class</th><th>Result</th><th>Reason</th></tr></thead>
+          <tbody id="result-rows"></tbody>
+        </table>
+      </div>
+      <div id="unmatched-wrap" hidden><h3>Needs Review</h3><ul id="unmatched"></ul></div>
+      <div id="missing-charters-wrap" class="missing-charters" hidden><h3>Missing Charter Drivers</h3><ul id="missing-charters"></ul></div>
+    </section>
+  </main>
+
+  <aside id="roster-editor" class="editor-panel" aria-hidden="true">
+    <div class="editor-heading">
+      <div><p class="eyebrow">Roster management</p><h2>Driver Lists</h2></div>
+      <button class="icon-button close-editor" type="button" aria-label="Close driver list editor">&times;</button>
+    </div>
+    <p class="editor-help">Assign drivers to Charter, Open-Charter, or Open. Drivers from the active session can be added directly.</p>
+    <section class="session-import">
+      <div class="session-import-heading"><span>Active iRacing roster</span><strong id="session-driver-summary">Checking session...</strong></div>
+      <div id="session-suggestions" class="session-suggestions"></div>
+    </section>
+    <div class="editor-tools">
+      <input id="roster-search" type="search" placeholder="Search driver or car number" aria-label="Search drivers">
+      <select id="roster-filter" aria-label="Filter driver group">
+        <option value="all">All groups</option><option value="charter">Charter</option><option value="open-charter">Open-Charter</option><option value="open">Open</option>
+      </select>
+      <button id="add-driver" type="button">+ Add Driver</button>
+    </div>
+    <div class="roster-column-head"><span>Car</span><span>Driver</span><span>Customer ID</span><span>Group</span><span></span></div>
+    <div id="roster-rows" class="editor-rows"></div>
+    <div class="editor-footer"><span id="roster-message" role="status"></span><button class="cancel-editor" type="button">Cancel</button><button id="save-roster" class="primary" type="button">Save Driver Lists</button></div>
+  </aside>
+
+  <aside id="track-editor" class="editor-panel" aria-hidden="true">
+    <div class="editor-heading">
+      <div><p class="eyebrow">Local track data</p><h2>Track List</h2></div>
+      <button class="icon-button close-editor" type="button" aria-label="Close track list editor">&times;</button>
+    </div>
+    <p class="editor-help">Track configurations are matched by the Track ID reported by the local SDK. Pit-stall counts are stored only on this computer.</p>
+    <section id="active-track-card" class="session-import">
+      <div class="session-import-heading"><span>Active iRacing track</span><strong id="active-track-summary">No active simulator session</strong></div>
+      <div id="active-track-action" class="active-track-action"></div>
+    </section>
+    <div class="editor-tools track-tools"><input id="track-search" type="search" placeholder="Search track or configuration" aria-label="Search tracks"><button id="add-track" type="button">+ Add Track</button></div>
+    <div class="track-column-head"><span>Track ID</span><span>Track</span><span>Configuration</span><span>Pit stalls</span><span></span></div>
+    <div id="track-rows" class="editor-rows"></div>
+    <div class="editor-footer"><span id="track-message" role="status"></span><button class="cancel-editor" type="button">Cancel</button><button id="save-tracks" class="primary" type="button">Save Track List</button></div>
+  </aside>
+  <div id="editor-scrim" class="editor-scrim" hidden></div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

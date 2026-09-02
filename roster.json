@@ -1,0 +1,368 @@
+[
+  {
+    "car_number": "00",
+    "name": "Mike Koch",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "8",
+    "name": "Carson Kvapil",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "2",
+    "name": "Neil Quick",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "3",
+    "name": "Brian McCann",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "6",
+    "name": "TJ Majors",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "7",
+    "name": "Cameron Brownlow",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "9",
+    "name": "Chris Mackey",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "12",
+    "name": "Tim Schofield",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "13",
+    "name": "Kyle White",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "14",
+    "name": "Kyle Pendygraft",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "15",
+    "name": "Garrett Johnston",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "17",
+    "name": "Evan Vecchia",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "18",
+    "name": "Josh Funkhouser",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "19",
+    "name": "Austin Beers",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "27",
+    "name": "Casey Bence",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "35",
+    "name": "Kyle Hardy",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "36",
+    "name": "Josh Meares",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "39",
+    "name": "Gaven Hinson",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "45",
+    "name": "Adam Benefiel",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "51",
+    "name": "Chris Walley",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "62",
+    "name": "Will Tyndall",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "75",
+    "name": "Chuck Sweeting",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "76",
+    "name": "Brent Butler",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "81",
+    "name": "Steven Durbin",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "88",
+    "name": "Jason Nilges",
+    "charter_level": "charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "5",
+    "name": "Terrance Murphy",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "1",
+    "name": "Dale Earnhardt Jr",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "10",
+    "name": "Andrew Player",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "16",
+    "name": "Sean Merriman",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "28",
+    "name": "TJ Ivey",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "33",
+    "name": "Gordon Spain",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "37",
+    "name": "Nick Gardiner",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "42",
+    "name": "Brad Lane",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "60",
+    "name": "Matt Moermond",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "68",
+    "name": "Dustin Buck",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "71",
+    "name": "Christopher Harrison",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "78",
+    "name": "Caleb Hunt",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "82",
+    "name": "Steven Luttrell",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "89",
+    "name": "Matthew Erbert",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "91",
+    "name": "Andrew Payne",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "95",
+    "name": "Phil Lunn",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "96",
+    "name": "Devon Eaker",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "97",
+    "name": "Slade Benesch",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "98",
+    "name": "Gavin Cichoski",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "09",
+    "name": "Shaun Wilder",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "077",
+    "name": "Keegan Sobilo",
+    "charter_level": "open-charter",
+    "cust_id": null
+  },
+  {
+    "car_number": "01",
+    "name": "James Coffman",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "07",
+    "name": "Tristan Combs",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "08",
+    "name": "Stephen Hassett",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "21",
+    "name": "Steven Steffen",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "25",
+    "name": "Stephen Gaul",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "38",
+    "name": "Ryan Blanchard",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "54",
+    "name": "Tony Hirschman",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "55",
+    "name": "Mardy Lindley",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "74",
+    "name": "Brian Wertman",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "77",
+    "name": "Tyler Green",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "83",
+    "name": "Brandon Mefford",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "92",
+    "name": "Daniel Dixon",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "99",
+    "name": "Parker Retzlaff",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "70",
+    "name": "Aaron Smith II",
+    "charter_level": "open",
+    "cust_id": null
+  },
+  {
+    "car_number": "31",
+    "name": "Zach Millett",
+    "charter_level": "open",
+    "cust_id": null
+  }
+]

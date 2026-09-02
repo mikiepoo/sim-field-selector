@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Qualifying Overlay</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='overlay.css') }}">
+</head>
+<body>
+  <main class="overlay-shell">
+    <header class="overlay-header">
+      <div class="broadcast-brand">
+        <div class="speed-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div>
+          <p class="kicker">TotalEnergies · Live field projection</p>
+          <h1>Qualifying</h1>
+          <p id="track-name" class="track-name">Waiting for track information</p>
+        </div>
+      </div>
+      <div class="broadcast-status">
+        <div class="clock"><span>Time remaining</span><strong id="time-remaining">--:--</strong></div>
+        <div id="session-state" class="session-state waiting">
+          <span class="state-dot"></span>
+          <div><strong>WAITING FOR IRACING</strong><small>Start or join the simulator session</small></div>
+        </div>
+      </div>
+    </header>
+
+    <section id="summary" class="summary" aria-live="polite">
+      <div><span>Timed / entered</span><strong id="entered-count">0</strong></div>
+      <div><span>Projected field</span><strong id="field-count">0 / 40</strong></div>
+      <div><span>Currently DNQ</span><strong id="dnq-count">0</strong></div>
+      <div><span>Missing charters</span><strong id="missing-count">0</strong></div>
+      <div><span>Open-Charter in</span><strong id="oc-count">0 / 0</strong></div>
+      <div class="bubble-card">
+        <span>Transfer bubble</span>
+        <div id="bubble-matchup" class="bubble-matchup"><strong>Waiting for qualifying times</strong></div>
+      </div>
+    </section>
+
+    <section class="standings">
+      <div class="standings-title">
+        <div><span class="legend in"></span>Projected in</div>
+        <div><span class="legend dnq"></span>Currently out</div>
+        <div><span class="legend bubble"></span>Bubble</div>
+        <div><span class="legend charter"></span>Charter</div>
+        <div><span class="legend open-charter"></span>Open-Charter</div>
+        <div><span class="legend open"></span>Open</div>
+        <div id="updated-at" class="updated-at">Not connected</div>
+      </div>
+      <div id="standings-columns" class="standings-columns"></div>
+    </section>
+
+    <footer>
+      <span id="rules-summary">40-car field · 10 Open-Charter guarantees · 5 base open spots</span>
+      <span id="notice">Results update every second and remain provisional during qualifying.</span>
+    </footer>
+  </main>
+  <script src="{{ url_for('static', filename='overlay.js') }}"></script>
+</body>
+</html>
