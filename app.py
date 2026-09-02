@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import json
+import os
+import threading
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -16,6 +19,15 @@ BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_PATHS = prepare_data_paths()
 
 
+def schedule_process_exit() -> None:
+    """Let the HTTP response reach the browser before stopping the desktop app."""
+    def exit_after_response() -> None:
+        time.sleep(0.4)
+        os._exit(0)
+
+    threading.Thread(target=exit_after_response, daemon=True).start()
+
+
 def create_app(test_config: dict | None = None) -> Flask:
     app = Flask(
         __name__,
@@ -26,6 +38,7 @@ def create_app(test_config: dict | None = None) -> Flask:
         ROSTER_PATH=str(DEFAULT_PATHS["roster"]),
         TRACKS_PATH=str(DEFAULT_PATHS["tracks"]),
         SNAPSHOT_PATH=str(DEFAULT_PATHS["snapshots"]),
+        EXIT_CALLBACK=schedule_process_exit,
     )
     if test_config:
         app.config.update(test_config)
@@ -52,6 +65,13 @@ def create_app(test_config: dict | None = None) -> Flask:
     @app.get("/overlay/details")
     def overlay_details():
         return render_template("overlay_details.html")
+
+    @app.post("/api/app/exit")
+    def exit_app_api():
+        if request.headers.get("X-Sim-Field-Selector") != "close":
+            return jsonify({"error": "Close request was not confirmed"}), 403
+        app.config["EXIT_CALLBACK"]()
+        return jsonify({"closing": True})
 
     @app.get("/api/roster")
     def get_roster():

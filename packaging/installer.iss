@@ -1,5 +1,5 @@
 #define MyAppName "Sim Field Selector"
-#define MyAppVersion "1.2.1"
+#define MyAppVersion "1.2.2"
 #define MyAppPublisher "Sim Field Selector"
 #define ProjectRoot AddBackslash(SourcePath) + ".."
 #define AppSource ProjectRoot + "\dist\SimFieldSelector"
@@ -26,8 +26,8 @@ CloseApplications=yes
 RestartApplications=no
 
 [Tasks]
-Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional shortcuts:"; Flags: checkedonce
-Name: "aidemo"; Description: "Install the AI qualifying demo roster"; GroupDescription: "Optional demonstration:"; Flags: checkedonce
+Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional shortcuts:"
+Name: "aidemo"; Description: "Install the AI qualifying demo roster"; GroupDescription: "Optional demonstration:"
 
 [Files]
 Source: "{#AppSource}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs

@@ -4,6 +4,7 @@ let rosterRows = [];
 let sessionDrivers = [];
 let sessionConnected = false;
 let trackRows = [];
+let appClosing = false;
 
 function updateFieldSettings() {
   const fieldSize = Number(document.querySelector("#field-size").value);
@@ -15,6 +16,7 @@ function updateFieldSettings() {
 }
 
 async function pollLive() {
+  if (appClosing) return;
   const params = new URLSearchParams({field_size: document.querySelector("#field-size").value});
   const state = document.querySelector("#live-state");
   try {
@@ -39,6 +41,31 @@ async function pollLive() {
       document.querySelector("#results").hidden = true;
     }
   } catch (error) {
+    document.querySelector("#error").textContent = error.message;
+  }
+}
+
+async function closeApplication() {
+  if (!window.confirm("Close Sim Field Selector? Live qualifying updates and overlays will stop.")) return;
+  const button = document.querySelector("#close-app");
+  button.disabled = true;
+  button.textContent = "Closing…";
+  try {
+    const response = await fetch("/api/app/exit", {
+      method: "POST",
+      headers: {"X-Sim-Field-Selector": "close"},
+    });
+    const data = await response.json();
+    if (!response.ok || !data.closing) throw new Error(data.error || "Unable to close the app");
+    appClosing = true;
+    const state = document.querySelector("#live-state");
+    state.className = "live-state waiting";
+    state.querySelector("strong").textContent = "Sim Field Selector is closed";
+    state.querySelector("small").textContent = "You can close this browser tab. Launch the app again when needed.";
+    document.querySelector("#results").hidden = true;
+  } catch (error) {
+    button.disabled = false;
+    button.textContent = "Close App";
     document.querySelector("#error").textContent = error.message;
   }
 }
@@ -270,6 +297,7 @@ document.querySelector("#finalize").addEventListener("click", finalizeField);
 document.querySelector("#copy").addEventListener("click", copyResults);
 document.querySelector("#edit-roster").addEventListener("click", openRosterEditor);
 document.querySelector("#edit-tracks").addEventListener("click", openTrackEditor);
+document.querySelector("#close-app").addEventListener("click", closeApplication);
 document.querySelectorAll(".close-editor,.cancel-editor").forEach((button) => button.addEventListener("click", () => setEditorOpen(null)));
 document.querySelector("#editor-scrim").addEventListener("click", () => setEditorOpen(null));
 document.querySelector("#roster-search").addEventListener("input", filterRosterRows);

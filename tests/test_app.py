@@ -62,6 +62,27 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(self.client.post("/api/demo-replay/open-iracing").status_code, 404)
         self.assertEqual(self.client.get("/api/demo/field").status_code, 404)
 
+    def test_close_button_uses_confirmed_local_exit_callback(self):
+        exit_calls = []
+        client = create_app({
+            "TESTING": True,
+            "EXIT_CALLBACK": lambda: exit_calls.append(True),
+        }).test_client()
+        page = client.get("/")
+        self.assertIn(b"Close App", page.data)
+
+        rejected = client.post("/api/app/exit")
+        self.assertEqual(rejected.status_code, 403)
+        self.assertEqual(exit_calls, [])
+
+        response = client.post(
+            "/api/app/exit",
+            headers={"X-Sim-Field-Selector": "close"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.get_json()["closing"])
+        self.assertEqual(exit_calls, [True])
+
     def test_roster_is_loaded(self):
         response = self.client.get("/api/roster")
         self.assertEqual(response.status_code, 200)

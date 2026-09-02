@@ -19,6 +19,8 @@ python app.py
 
 The main screen waits for an active simulator session and then refreshes the live qualifying calculation once per second. Use **Testing Instructions** on the main screen for the AI-roster walkthrough.
 
+Use **Close App** in the upper-right corner to stop the background server. The browser confirms the action and then shows when it is safe to close the tab.
+
 ## Build the Windows installer
 
 The main installer offers an optional **Install the AI qualifying demo roster** component. It is selected by default. When selected, it installs the 58-driver roster at `Documents\iRacing\airosters\Sim Field Selector Demo\roster.json` and adds an **AI Demo Guide** Start-menu shortcut. The roster is left in place when the application is uninstalled and an existing roster with the same name is never overwritten. The guide does not open automatically after setup.
