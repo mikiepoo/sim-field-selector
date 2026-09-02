@@ -1,5 +1,5 @@
 #define MyAppName "Sim Field Selector"
-#define MyAppVersion "1.2.0"
+#define MyAppVersion "1.2.1"
 #define MyAppPublisher "Sim Field Selector"
 #define ProjectRoot AddBackslash(SourcePath) + ".."
 #define AppSource ProjectRoot + "\dist\SimFieldSelector"
@@ -27,11 +27,11 @@ RestartApplications=no
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional shortcuts:"; Flags: checkedonce
-Name: "aidemo"; Description: "Install the AI qualifying demo roster and how-to guide"; GroupDescription: "Optional demonstration:"; Flags: checkedonce
+Name: "aidemo"; Description: "Install the AI qualifying demo roster"; GroupDescription: "Optional demonstration:"; Flags: checkedonce
 
 [Files]
 Source: "{#AppSource}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#ProjectRoot}\packaging\AI-DEMO-GUIDE.html"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ProjectRoot}\static\AI-DEMO-GUIDE.html"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#AIRosterSource}"; DestDir: "{userdocs}\iRacing\airosters\Sim Field Selector Demo"; DestName: "roster.json"; Tasks: aidemo; Flags: onlyifdoesntexist uninsneveruninstall
 
 [InstallDelete]
@@ -45,5 +45,4 @@ Name: "{group}\AI Demo Guide"; Filename: "{app}\AI-DEMO-GUIDE.html"; Tasks: aide
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\SimFieldSelector.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\AI-DEMO-GUIDE.html"; Description: "Open the AI demo guide"; Tasks: aidemo; Flags: shellexec skipifsilent
 Filename: "{app}\SimFieldSelector.exe"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent

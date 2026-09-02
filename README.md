@@ -17,11 +17,11 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The main screen waits for an active simulator session and then refreshes the live qualifying calculation once per second. Click **Run Dry Demo** to preview a 48-driver sample calculation without opening iRacing. The dry run uses the same roster matching and field-selection logic as the live process, does not save a field snapshot, and can also be opened in either broadcast view.
+The main screen waits for an active simulator session and then refreshes the live qualifying calculation once per second. Use **Testing Instructions** on the main screen for the AI-roster walkthrough.
 
 ## Build the Windows installer
 
-The main installer offers an optional **Install the AI qualifying demo roster and how-to guide** component. When selected, it installs the 58-driver roster at `Documents\iRacing\airosters\Sim Field Selector Demo\roster.json`, adds an **AI Demo Guide** Start-menu shortcut, and opens the guide after setup. The roster is left in place when the application is uninstalled and an existing roster with the same name is never overwritten.
+The main installer offers an optional **Install the AI qualifying demo roster** component. It is selected by default. When selected, it installs the 58-driver roster at `Documents\iRacing\airosters\Sim Field Selector Demo\roster.json` and adds an **AI Demo Guide** Start-menu shortcut. The roster is left in place when the application is uninstalled and an existing roster with the same name is never overwritten. The guide does not open automatically after setup.
 
 The AI demonstration uses a real local qualifying session, so results appear and improve as AI drivers complete laps. No replay file or external demo download is used.
 
@@ -37,8 +37,6 @@ The signed-or-unsigned installer is written to `release\SimFieldSelectorSetup.ex
 The generated installer is not automatically code-signed. Sign both the packaged executable and final installer with an Authenticode certificate before public distribution.
 
 ## AI qualifying demo
-
-For an immediate test, launch the application and click **Run Dry Demo**. Explanation cards above the preview describe Charter, Open-Charter, final-pool, and DNQ results. Click **Return to Live** when finished.
 
 After installing the optional AI demo component, restart the iRacing UI and create an **AI Single Player** race using the **Sim Field Selector Demo** opponent roster. Choose a compatible NASCAR Xfinity car, an AI-enabled track, and a qualifying session. Start Sim Field Selector before qualifying begins. The installed guide contains the complete walkthrough and remains available from the Start menu.
 
@@ -69,7 +67,6 @@ The **Finalize Field** button writes an auditable JSON snapshot under `snapshots
 ## Local endpoints
 
 - `GET /api/live/field` returns the current live field calculation.
-- `GET /api/demo/field` returns the built-in 48-driver dry-run calculation.
 - `POST /api/live/finalize` saves the current live field snapshot.
 - `GET /api/live/drivers` returns the active simulator roster for the driver editor.
 - `GET` and `PUT /api/roster` load and save the configured driver list.

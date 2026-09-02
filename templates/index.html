@@ -25,7 +25,7 @@
 
       <div class="live-toolbar">
         <div class="editor-actions">
-          <button id="run-demo" class="button demo-button" type="button">Run Dry Demo</button>
+          <a class="button secondary" href="{{ url_for('static', filename='AI-DEMO-GUIDE.html') }}" target="_blank" rel="noopener">Testing Instructions</a>
           <button id="edit-roster" class="button secondary" type="button">Edit Driver Lists</button>
           <button id="edit-tracks" class="button secondary" type="button">Edit Track List</button>
         </div>
@@ -46,7 +46,7 @@
 
     <section id="results" class="panel results" hidden>
       <div class="result-heading">
-        <div><p id="result-kicker" class="eyebrow">Live calculation</p><h2>Field Results</h2></div>
+        <div><p class="eyebrow">Live calculation</p><h2>Field Results</h2></div>
         <div class="result-actions">
           <button id="finalize" class="button primary" type="button">Finalize Field</button>
           <button id="copy" class="button secondary" type="button">Copy Results</button>

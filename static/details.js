@@ -1,12 +1,10 @@
 const query = new URLSearchParams(window.location.search);
 const requestedSize = Number(query.get("field_size"));
 const fieldSize = Number.isInteger(requestedSize) && requestedSize >= 40 && requestedSize <= 43 ? requestedSize : 40;
-const demoMode = query.get("demo") === "1";
 
 async function poll() {
   try {
-    const endpoint = demoMode ? "/api/demo/field" : "/api/live/field";
-    const response = await fetch(`${endpoint}?field_size=${fieldSize}`, {cache: "no-store"});
+    const response = await fetch(`/api/live/field?field_size=${fieldSize}`, {cache: "no-store"});
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || "Unable to calculate live field");
     renderState(result.live || {});
@@ -31,7 +29,7 @@ function renderState(live) {
     return;
   }
   state.className = `session-state ${live.provisional ? "provisional" : "final"}`;
-  state.querySelector("strong").textContent = live.dry_run ? "DRY RUN" : live.provisional ? "PROVISIONAL" : "FINAL";
+  state.querySelector("strong").textContent = live.provisional ? "PROVISIONAL" : "FINAL";
   document.querySelector("#track-name").textContent = [live.track_name, live.track_config].filter(Boolean).join(" · ") || `Session ${live.subsession_id}`;
   document.querySelector("#time-remaining").textContent = live.provisional ? formatRemaining(live.session_time_remaining) : "FINAL";
   document.querySelector("#total-drivers").textContent = String(live.driver_count || 0);

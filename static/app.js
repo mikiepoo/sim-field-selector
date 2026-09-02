@@ -4,25 +4,17 @@ let rosterRows = [];
 let sessionDrivers = [];
 let sessionConnected = false;
 let trackRows = [];
-let demoMode = false;
 
 function updateFieldSettings() {
   const fieldSize = Number(document.querySelector("#field-size").value);
   document.querySelector("#derived-oc-spots").textContent = Number.isFinite(fieldSize) ? fieldSize - 30 : "—";
-  const params = currentViewParams();
+  const params = new URLSearchParams({field_size: document.querySelector("#field-size").value});
   document.querySelector("#overlay-link").href = `/overlay?${params}`;
   document.querySelector("#overlay-details-link").href = `/overlay/details?${params}`;
-  if (demoMode) runDryDemo(true); else pollLive();
-}
-
-function currentViewParams() {
-  const values = {field_size: document.querySelector("#field-size").value};
-  if (demoMode) values.demo = "1";
-  return new URLSearchParams(values);
+  pollLive();
 }
 
 async function pollLive() {
-  if (demoMode) return;
   const params = new URLSearchParams({field_size: document.querySelector("#field-size").value});
   const state = document.querySelector("#live-state");
   try {
@@ -51,41 +43,6 @@ async function pollLive() {
   }
 }
 
-async function runDryDemo(refresh = false) {
-  const button = document.querySelector("#run-demo");
-  if (demoMode && !refresh) {
-    demoMode = false;
-    button.dataset.active = "false";
-    button.textContent = "Run Dry Demo";
-    document.querySelector("#finalize").disabled = false;
-    updateFieldSettings();
-    return;
-  }
-
-  demoMode = true;
-  button.dataset.active = "true";
-  button.textContent = "Return to Live";
-  document.querySelector("#finalize").disabled = true;
-  const params = currentViewParams();
-  document.querySelector("#overlay-link").href = `/overlay?${params}`;
-  document.querySelector("#overlay-details-link").href = `/overlay/details?${params}`;
-  try {
-    const response = await fetch(`/api/demo/field?${params}`, {cache: "no-store"});
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "Unable to run the dry demo");
-    latestLive = data.live || {};
-    const state = document.querySelector("#live-state");
-    state.className = "live-state demo";
-    state.querySelector("strong").textContent = "DRY RUN — SAMPLE QUALIFYING";
-    state.querySelector("small").textContent = `${latestLive.driver_count || 0} sample drivers · no iRacing session required · nothing will be saved`;
-    document.querySelector("#pit-stall-count").textContent = latestLive.pit_stalls || "Not stored";
-    document.querySelector("#error").textContent = "";
-    renderResults(data);
-  } catch (error) {
-    document.querySelector("#error").textContent = error.message;
-  }
-}
-
 function liveDescription(live) {
   const track = [live.track_name, live.track_config].filter(Boolean).join(" · ");
   const pitStalls = live.pit_stalls ? ` · ${live.pit_stalls} pit stalls` : " · pit stalls not stored";
@@ -94,7 +51,6 @@ function liveDescription(live) {
 
 function renderResults(result) {
   latestResult = result;
-  document.querySelector("#result-kicker").textContent = result.live?.dry_run ? "Dry-run calculation" : "Live calculation";
   document.querySelector("#summary").innerHTML = [
     [result.live?.driver_count ?? result.drivers.length, "Total drivers"],
     [result.summary.field_size ?? "—", "Field size"],
@@ -314,7 +270,6 @@ document.querySelector("#finalize").addEventListener("click", finalizeField);
 document.querySelector("#copy").addEventListener("click", copyResults);
 document.querySelector("#edit-roster").addEventListener("click", openRosterEditor);
 document.querySelector("#edit-tracks").addEventListener("click", openTrackEditor);
-document.querySelector("#run-demo").addEventListener("click", () => runDryDemo());
 document.querySelectorAll(".close-editor,.cancel-editor").forEach((button) => button.addEventListener("click", () => setEditorOpen(null)));
 document.querySelector("#editor-scrim").addEventListener("click", () => setEditorOpen(null));
 document.querySelector("#roster-search").addEventListener("input", filterRosterRows);

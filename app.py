@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -128,75 +127,9 @@ def create_app(test_config: dict | None = None) -> Flask:
         except (SelectionError, TypeError, ValueError) as exc:
             return {"error": str(exc), "live": live}, 400
 
-    def calculate_demo_field(settings: dict) -> tuple[dict, int]:
-        try:
-            field_size, open_charter_spots, open_spots = field_settings(settings)
-            configured_roster = roster()
-            groups = {
-                level: [driver for driver in configured_roster if driver.charter_level == level]
-                for level in ("charter", "open-charter", "open")
-            }
-            selected = (
-                groups["charter"][:22]
-                + groups["open-charter"][:17]
-                + groups["open"][:9]
-            )
-            selected_ids = {id(driver) for driver in selected}
-            selected.extend(
-                driver for driver in configured_roster
-                if id(driver) not in selected_ids and len(selected) < 48
-            )
-            selected.sort(
-                key=lambda driver: hashlib.sha256(
-                    f"{driver.name}|{driver.car_number}".encode("utf-8")
-                ).hexdigest()
-            )
-            candidates = [
-                {
-                    "name": driver.name,
-                    "car_number": driver.car_number,
-                    "cust_id": driver.cust_id,
-                    "best_lap_time": round(23.348 + index * 0.011, 3),
-                }
-                for index, driver in enumerate(selected)
-            ]
-            result = select_field(
-                candidates,
-                configured_roster,
-                open_charter_spots,
-                open_spots,
-                field_size,
-            )
-            captured_at = datetime.now(timezone.utc).isoformat()
-            result["source"] = {"type": "dry-run", "captured_at": captured_at}
-            result["live"] = {
-                "connected": True,
-                "sdk_available": True,
-                "message": "Dry-run sample qualifying",
-                "captured_at": captured_at,
-                "subsession_id": "DEMO",
-                "track_name": "Sim Field Selector Demo",
-                "track_config": "Dry Run",
-                "session_name": "QUALIFY",
-                "session_state": "racing",
-                "session_time_remaining": 600,
-                "provisional": True,
-                "driver_count": len(candidates),
-                "pit_stalls": field_size,
-                "dry_run": True,
-            }
-            return result, 200
-        except (SelectionError, TypeError, ValueError) as exc:
-            return {"error": str(exc)}, 400
-
     @app.get("/api/live/field")
     def live_field_api():
         result, status = calculate_live_field(request.args)
-        return jsonify(result), status
-
-    @app.get("/api/demo/field")
-    def demo_field_api():
-        result, status = calculate_demo_field(request.args)
         return jsonify(result), status
 
     @app.post("/api/live/finalize")
