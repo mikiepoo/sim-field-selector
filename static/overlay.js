@@ -2,6 +2,7 @@ const query = new URLSearchParams(window.location.search);
 const settings = {
   field_size: boundedFieldSize("field_size", 40),
 };
+const demoMode = query.get("demo") === "1";
 let previousDrivers = new Map();
 let hasRenderedField = false;
 
@@ -15,8 +16,9 @@ document.querySelector("#rules-summary").textContent =
 
 async function poll() {
   const params = new URLSearchParams(settings);
+  const endpoint = demoMode ? "/api/demo/field" : "/api/live/field";
   try {
-    const response = await fetch(`/api/live/field?${params}`, {cache: "no-store"});
+    const response = await fetch(`${endpoint}?${params}`, {cache: "no-store"});
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Unable to calculate live field");
     renderState(data.live || {});
@@ -41,7 +43,7 @@ function renderState(live) {
   }
 
   state.className = `session-state ${live.provisional ? "provisional" : "final"}`;
-  state.querySelector("strong").textContent = live.provisional ? "QUALIFYING · PROVISIONAL" : "QUALIFYING · FINAL";
+  state.querySelector("strong").textContent = live.dry_run ? "DRY RUN · SAMPLE" : live.provisional ? "QUALIFYING · PROVISIONAL" : "QUALIFYING · FINAL";
   state.querySelector("small").textContent =
     `Session ${live.subsession_id || "unknown"} · ${live.session_name} · ${live.session_state}`;
   document.querySelector("#track-name").textContent =

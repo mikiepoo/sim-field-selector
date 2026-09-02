@@ -25,6 +25,7 @@
 
       <div class="live-toolbar">
         <div class="editor-actions">
+          <button id="run-demo" class="button demo-button" type="button">Run Dry Demo</button>
           <button id="edit-roster" class="button secondary" type="button">Edit Driver Lists</button>
           <button id="edit-tracks" class="button secondary" type="button">Edit Track List</button>
         </div>
@@ -45,11 +46,17 @@
 
     <section id="results" class="panel results" hidden>
       <div class="result-heading">
-        <div><p class="eyebrow">Live calculation</p><h2>Field Results</h2></div>
+        <div><p id="result-kicker" class="eyebrow">Live calculation</p><h2>Field Results</h2></div>
         <div class="result-actions">
           <button id="finalize" class="button primary" type="button">Finalize Field</button>
           <button id="copy" class="button secondary" type="button">Copy Results</button>
         </div>
+      </div>
+      <div class="preview-help" aria-label="Field result explanations">
+        <article class="charter-help"><strong>Charter</strong><span>Locked into the field whenever that configured driver enters.</span></article>
+        <article class="open-charter-help"><strong>Open-Charter</strong><span>The fastest 10–13 receive guaranteed spots, based on field size.</span></article>
+        <article class="open-help"><strong>Final shared pool</strong><span>Remaining Open-Charter and Open drivers compete for the fastest available spots.</span></article>
+        <article class="dnq-help"><strong>DNQ</strong><span>Outside the projected field. Missing Charters add positions to the shared pool.</span></article>
       </div>
       <div id="summary" class="summary"></div>
       <div class="table-wrap">

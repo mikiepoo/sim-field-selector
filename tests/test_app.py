@@ -32,17 +32,32 @@ class ApiTests(unittest.TestCase):
     def setUp(self):
         self.client = create_app({"TESTING": True, "SECRET_KEY": "test"}).test_client()
 
-    def test_main_page_is_live_only_and_has_editors(self):
+    def test_main_page_has_dry_demo_preview_and_editors(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Waiting for the iRacing simulator", response.data)
         self.assertIn(b"Edit Driver Lists", response.data)
         self.assertIn(b"Edit Track List", response.data)
+        self.assertIn(b"Run Dry Demo", response.data)
+        self.assertIn(b"Field result explanations", response.data)
+        self.assertIn(b"Final shared pool", response.data)
         self.assertNotIn(b"Download Demo Replay", response.data)
         self.assertNotIn(b"Paste qualifying order", response.data)
         self.assertNotIn(b"Upload result file", response.data)
         self.assertNotIn(b"Connect iRacing", response.data)
         self.assertNotIn(b"Demo replay", response.data)
+
+    def test_dry_demo_uses_normal_field_rules_without_live_session(self):
+        response = self.client.get("/api/demo/field?field_size=40")
+        self.assertEqual(response.status_code, 200)
+        result = response.get_json()
+        self.assertEqual(result["source"]["type"], "dry-run")
+        self.assertTrue(result["live"]["dry_run"])
+        self.assertEqual(result["live"]["driver_count"], 48)
+        self.assertEqual(result["summary"]["in_field"], 40)
+        self.assertEqual(result["summary"]["dnq"], 8)
+        self.assertEqual(result["summary"]["missing_charters"], 3)
+        self.assertEqual(result["summary"]["added_vacancy_spots"], 3)
 
     def test_removed_online_and_manual_routes_are_unavailable(self):
         self.assertEqual(self.client.get("/auth/login").status_code, 404)
