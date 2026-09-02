@@ -4,6 +4,7 @@ let rosterRows = [];
 let sessionDrivers = [];
 let sessionConnected = false;
 let trackRows = [];
+let demoReplayInstalled = false;
 
 function updateFieldSettings() {
   const fieldSize = Number(document.querySelector("#field-size").value);
@@ -31,7 +32,7 @@ async function pollLive() {
     document.querySelector("#pit-stall-count").textContent = latestLive.connected && latestLive.pit_stalls
       ? latestLive.pit_stalls
       : "Not stored";
-    document.querySelector("#demo-help").hidden = Boolean(latestLive.connected);
+    updateDemoReplayVisibility();
     if (!response.ok) throw new Error(data.error || "Unable to calculate live field");
     document.querySelector("#error").textContent = "";
     if (latestLive.connected) {
@@ -104,9 +105,11 @@ async function loadDemoReplayStatus() {
     const response = await fetch("/api/demo-replay", {cache: "no-store"});
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Unable to check the demo replay");
+    demoReplayInstalled = Boolean(data.installed);
+    updateDemoReplayVisibility();
     if (data.installed) {
       button.hidden = true;
-      message.textContent = `Installed at ${data.destination}. Open iRacing, choose Replays, load ${data.filename}, and press Play.`;
+      message.textContent = "";
     } else if (data.configured) {
       button.hidden = false;
       button.disabled = false;
@@ -131,7 +134,8 @@ async function downloadDemoReplay() {
     const response = await fetch("/api/demo-replay/download", {method: "POST"});
     const data = await response.json();
     if (!response.ok || !data.saved) throw new Error(data.error || "Unable to download the demo replay");
-    message.textContent = `Ready at ${data.destination}. Open iRacing, choose Replays, load testapiqslice.rpy, and press Play.`;
+    demoReplayInstalled = true;
+    updateDemoReplayVisibility();
     button.hidden = true;
     if (window.confirm("The demo replay is ready. Open iRacing now?")) {
       await openIracingForReplay(message);
@@ -141,6 +145,10 @@ async function downloadDemoReplay() {
     button.disabled = false;
     button.textContent = "Try Download Again";
   }
+}
+
+function updateDemoReplayVisibility() {
+  document.querySelector("#demo-help").hidden = demoReplayInstalled || Boolean(latestLive.connected);
 }
 
 async function openIracingForReplay(message) {

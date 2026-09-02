@@ -1,5 +1,5 @@
 #define MyAppName "Sim Field Selector"
-#define MyAppVersion "1.0.1"
+#define MyAppVersion "1.0.2"
 #define MyAppPublisher "Sim Field Selector"
 #define ProjectRoot AddBackslash(SourcePath) + ".."
 #define AppSource ProjectRoot + "\dist\SimFieldSelector"
