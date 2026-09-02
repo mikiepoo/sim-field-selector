@@ -3,6 +3,7 @@ setlocal
 
 cd /d "%~dp0"
 set "TOOL_PYTHON=%CD%\.venv\Scripts\python.exe"
+set "TOOL_PYTHONW=%CD%\.venv\Scripts\pythonw.exe"
 
 if not exist "%TOOL_PYTHON%" (
     echo Creating the Python virtual environment...
@@ -10,7 +11,7 @@ if not exist "%TOOL_PYTHON%" (
     if errorlevel 1 goto :setup_error
 )
 
-"%TOOL_PYTHON%" -c "import flask, irsdk" >nul 2>&1
+"%TOOL_PYTHON%" -c "import flask, irsdk, webview" >nul 2>&1
 if errorlevel 1 (
     echo Installing required packages...
     "%TOOL_PYTHON%" -m pip install -r requirements.txt
@@ -24,9 +25,7 @@ if /i "%~1"=="--check" (
 )
 
 echo Starting the iRacing Field Tool...
-start "iRacing Field Tool Server" cmd /k ""%TOOL_PYTHON%" "%CD%\app.py""
-
-powershell.exe -NoProfile -WindowStyle Hidden -Command "Start-Sleep -Seconds 2; Start-Process 'http://127.0.0.1:5000'"
+start "" "%TOOL_PYTHONW%" "%CD%\launcher.py"
 
 endlocal
 exit /b 0

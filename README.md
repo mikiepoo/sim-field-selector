@@ -6,7 +6,7 @@ No iRacing web credentials or online data service is used. The tool must run on 
 
 ## Start the tool
 
-For the quickest local start, double-click `start_iracing_field_tool.bat`. It creates the Python environment when needed, starts the local server, and opens `http://127.0.0.1:5000`.
+For the quickest local start, double-click `start_iracing_field_tool.bat`. It creates the Python environment when needed, starts the local server, and opens the native Windows application window.
 
 To start it manually:
 
@@ -14,12 +14,12 @@ To start it manually:
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-python app.py
+python launcher.py
 ```
 
-The main screen waits for an active simulator session and then refreshes the live qualifying calculation once per second. Use **Testing Instructions** on the main screen for the AI-roster walkthrough.
+The application opens as a normal Windows desktop window branded for the IROC Challenge Series. It can be minimized to the Windows taskbar, and closing the window stops the local server. The main screen waits for an active simulator session and then refreshes the live qualifying calculation once per second. Use **Testing Instructions** on the main screen for the AI-roster walkthrough.
 
-Use **Close App** in the upper-right corner to stop the background server. The browser confirms the action and then shows when it is safe to close the tab.
+Use the window’s **X** or **Close App** in the upper-right corner to stop the background server. **Close App** asks for confirmation first.
 
 ## Build the Windows installer
 

@@ -39,6 +39,8 @@ class ApiTests(unittest.TestCase):
         self.assertIn(b"Edit Driver Lists", response.data)
         self.assertIn(b"Edit Track List", response.data)
         self.assertIn(b"Testing Instructions", response.data)
+        self.assertIn(b"iroc-challenge-series.png", response.data)
+        self.assertIn(b"IROC Challenge Series presented by NARA", response.data)
         self.assertIn(b"Field result explanations", response.data)
         self.assertIn(b"Final shared pool", response.data)
         self.assertNotIn(b"Download Demo Replay", response.data)
