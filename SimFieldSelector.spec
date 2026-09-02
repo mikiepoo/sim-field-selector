@@ -9,7 +9,6 @@ a = Analysis(
         ("static", "static"),
         ("roster.json", "."),
         ("tracks.json", "."),
-        ("build/demo_config/demo_replay.json", "."),
     ],
     hiddenimports=["irsdk", "yaml"],
     hookspath=[],

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sim Field Selector - AI Qualifying Demo</title>
+  <style>
+    :root { color-scheme: dark; --gold:#f4ad17; --ink:#f5f7fa; --muted:#aab3bf; --panel:#151c24; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:#0b1016; font:16px/1.55 "Segoe UI",Arial,sans-serif; }
+    header { padding:34px max(24px,calc((100vw - 900px)/2)); border-bottom:5px solid var(--gold); background:#080b0f; }
+    main { width:min(900px,calc(100% - 32px)); margin:28px auto 60px; }
+    h1 { margin:0 0 8px; font-size:clamp(2rem,6vw,3.5rem); letter-spacing:-.04em; }
+    h2 { margin:0 0 12px; }
+    p { color:var(--muted); }
+    .eyebrow { margin:0 0 7px; color:var(--gold); font-size:.75rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .panel { margin-bottom:18px; padding:22px; border:1px solid #2b3643; border-radius:10px; background:var(--panel); }
+    ol { margin:0; padding-left:26px; }
+    li { margin:0 0 14px; padding-left:7px; }
+    li::marker { color:var(--gold); font-weight:800; }
+    strong { color:#fff; }
+    code { padding:2px 6px; border-radius:4px; color:#fff; background:#293440; }
+    .success { border-left:5px solid #2bd47d; }
+    .note { border-left:5px solid var(--gold); }
+    a { color:#ffd166; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Sim Field Selector</p>
+    <h1>AI Qualifying Demo</h1>
+    <p>The installer added a 58-driver AI roster. Run a real local AI qualifying session to watch the field calculation update live.</p>
+  </header>
+  <main>
+    <section class="panel success">
+      <h2>Roster installed</h2>
+      <p>The roster is stored at <code>Documents\iRacing\airosters\Sim Field Selector Demo\roster.json</code>. If iRacing was open during installation, close and reopen the iRacing UI so it discovers the roster.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Run the demonstration</h2>
+      <ol>
+        <li>Open the <strong>iRacing UI</strong> and select <strong>AI Single Player</strong>.</li>
+        <li>Create a <strong>Single Race</strong> using a compatible NASCAR Xfinity car and an AI-enabled track you own.</li>
+        <li>Choose <strong>Sim Field Selector Demo</strong> as the AI opponent roster and add the desired opponents.</li>
+        <li>Configure the event with a qualifying session. A 10-minute qualifying session is a useful demonstration length.</li>
+        <li>Launch <strong>Sim Field Selector</strong> before qualifying begins. Leave its waiting screen open.</li>
+        <li>Start qualifying in the simulator. As AI drivers complete laps, qualifying positions and field-transfer calculations will update automatically.</li>
+        <li>Use <strong>Open Live Breakdown</strong> for the full four-column qualifying view or <strong>Open Broadcast Overlay</strong> for OBS.</li>
+      </ol>
+    </section>
+
+    <section class="panel note">
+      <h2>Important</h2>
+      <p>This is a live AI session, not a replay. The simulator and Sim Field Selector must run on the same computer and at the same Windows privilege level. AI sessions do not affect iRating or Safety Rating.</p>
+      <p>If the tool remains on “Waiting for the iRacing simulator,” close both programs and restart them normally without using <strong>Run as administrator</strong>.</p>
+    </section>
+
+    <p>This guide remains available from <strong>Start menu → Sim Field Selector → AI Demo Guide</strong>.</p>
+  </main>
+</body>
+</html>

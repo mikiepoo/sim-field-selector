@@ -1,21 +1,12 @@
 from __future__ import annotations
 
 import json
-import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
 from flask import Flask, jsonify, render_template, request
 
 from field_selector import SelectionError, load_roster, save_roster, select_field
-from demo_replay import (
-    ReplayDownloadError,
-    default_replay_destination,
-    download_replay,
-    load_download_url,
-    open_iracing,
-    replay_status,
-)
 from live_iracing import LiveIRacingReader
 from runtime_paths import prepare_data_paths
 from tracks import find_track, load_tracks, save_tracks
@@ -35,14 +26,11 @@ def create_app(test_config: dict | None = None) -> Flask:
         ROSTER_PATH=str(DEFAULT_PATHS["roster"]),
         TRACKS_PATH=str(DEFAULT_PATHS["tracks"]),
         SNAPSHOT_PATH=str(DEFAULT_PATHS["snapshots"]),
-        REPLAY_URL=load_download_url(DEFAULT_PATHS["resource_dir"]),
-        REPLAY_DESTINATION=str(default_replay_destination()),
     )
     if test_config:
         app.config.update(test_config)
 
     live_reader = app.config.get("LIVE_READER") or LiveIRacingReader()
-    replay_download_lock = threading.Lock()
 
     def roster():
         return load_roster(app.config["ROSTER_PATH"])
@@ -95,34 +83,6 @@ def create_app(test_config: dict | None = None) -> Flask:
             tracks = save_tracks(app.config["TRACKS_PATH"], body.get("tracks"))
             return jsonify({"saved": True, "tracks": tracks, "count": len(tracks)})
         except (TypeError, ValueError, OSError) as exc:
-            return jsonify({"error": str(exc)}), 400
-
-    @app.get("/api/demo-replay")
-    def demo_replay_status_api():
-        destination = Path(app.config["REPLAY_DESTINATION"])
-        return jsonify(replay_status(destination, bool(app.config["REPLAY_URL"])))
-
-    @app.post("/api/demo-replay/download")
-    def demo_replay_download_api():
-        url = str(app.config["REPLAY_URL"] or "").strip()
-        if not url:
-            return jsonify({"error": "This build does not have a demo replay download URL configured."}), 404
-        if not replay_download_lock.acquire(blocking=False):
-            return jsonify({"error": "The demo replay is already downloading."}), 409
-        try:
-            result = download_replay(url, Path(app.config["REPLAY_DESTINATION"]))
-            return jsonify({"saved": True, **result})
-        except ReplayDownloadError as exc:
-            return jsonify({"error": str(exc)}), 400
-        finally:
-            replay_download_lock.release()
-
-    @app.post("/api/demo-replay/open-iracing")
-    def demo_replay_open_iracing_api():
-        try:
-            open_iracing()
-            return jsonify({"opened": True})
-        except ReplayDownloadError as exc:
             return jsonify({"error": str(exc)}), 400
 
     @app.get("/api/live/drivers")

@@ -4,7 +4,6 @@ let rosterRows = [];
 let sessionDrivers = [];
 let sessionConnected = false;
 let trackRows = [];
-let demoReplayInstalled = false;
 
 function updateFieldSettings() {
   const fieldSize = Number(document.querySelector("#field-size").value);
@@ -32,7 +31,6 @@ async function pollLive() {
     document.querySelector("#pit-stall-count").textContent = latestLive.connected && latestLive.pit_stalls
       ? latestLive.pit_stalls
       : "Not stored";
-    updateDemoReplayVisibility();
     if (!response.ok) throw new Error(data.error || "Unable to calculate live field");
     document.querySelector("#error").textContent = "";
     if (latestLive.connected) {
@@ -96,70 +94,6 @@ async function copyResults() {
   await navigator.clipboard.writeText(text);
   document.querySelector("#copy").textContent = "Copied";
   window.setTimeout(() => document.querySelector("#copy").textContent = "Copy Results", 1200);
-}
-
-async function loadDemoReplayStatus() {
-  const button = document.querySelector("#download-demo-replay");
-  const message = document.querySelector("#demo-replay-message");
-  try {
-    const response = await fetch("/api/demo-replay", {cache: "no-store"});
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "Unable to check the demo replay");
-    demoReplayInstalled = Boolean(data.installed);
-    updateDemoReplayVisibility();
-    if (data.installed) {
-      button.hidden = true;
-      message.textContent = "";
-    } else if (data.configured) {
-      button.hidden = false;
-      button.disabled = false;
-      message.textContent = `Download ${data.filename} directly into your iRacing replay folder.`;
-    } else {
-      button.hidden = true;
-      message.textContent = "This build does not include a demo replay download link.";
-    }
-  } catch (error) {
-    button.hidden = true;
-    message.textContent = error.message;
-  }
-}
-
-async function downloadDemoReplay() {
-  const button = document.querySelector("#download-demo-replay");
-  const message = document.querySelector("#demo-replay-message");
-  button.disabled = true;
-  button.textContent = "Downloading...";
-  message.textContent = "Downloading about 298 MB. Keep this application open until it finishes.";
-  try {
-    const response = await fetch("/api/demo-replay/download", {method: "POST"});
-    const data = await response.json();
-    if (!response.ok || !data.saved) throw new Error(data.error || "Unable to download the demo replay");
-    demoReplayInstalled = true;
-    updateDemoReplayVisibility();
-    button.hidden = true;
-    if (window.confirm("The demo replay is ready. Open iRacing now?")) {
-      await openIracingForReplay(message);
-    }
-  } catch (error) {
-    message.textContent = error.message;
-    button.disabled = false;
-    button.textContent = "Try Download Again";
-  }
-}
-
-function updateDemoReplayVisibility() {
-  document.querySelector("#demo-help").hidden = demoReplayInstalled || Boolean(latestLive.connected);
-}
-
-async function openIracingForReplay(message) {
-  try {
-    message.textContent = "Opening iRacing. In the iRacing UI, choose Replays and launch testapiqslice.rpy.";
-    const response = await fetch("/api/demo-replay/open-iracing", {method: "POST"});
-    const data = await response.json();
-    if (!response.ok || !data.opened) throw new Error(data.error || "Unable to open iRacing");
-  } catch (error) {
-    message.textContent = `${error.message} The replay is already downloaded and ready to use.`;
-  }
 }
 
 function setEditorOpen(editorId) {
@@ -334,7 +268,6 @@ function formatLap(seconds) { const value = Number(seconds); if (!Number.isFinit
 document.querySelector("#field-size").addEventListener("input", updateFieldSettings);
 document.querySelector("#finalize").addEventListener("click", finalizeField);
 document.querySelector("#copy").addEventListener("click", copyResults);
-document.querySelector("#download-demo-replay").addEventListener("click", downloadDemoReplay);
 document.querySelector("#edit-roster").addEventListener("click", openRosterEditor);
 document.querySelector("#edit-tracks").addEventListener("click", openTrackEditor);
 document.querySelectorAll(".close-editor,.cancel-editor").forEach((button) => button.addEventListener("click", () => setEditorOpen(null)));
@@ -353,5 +286,4 @@ document.querySelector("#active-track-action").addEventListener("click", (event)
 document.addEventListener("keydown", (event) => { if (event.key === "Escape") setEditorOpen(null); });
 
 updateFieldSettings();
-loadDemoReplayStatus();
 window.setInterval(pollLive, 1000);

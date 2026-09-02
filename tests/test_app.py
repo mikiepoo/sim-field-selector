@@ -2,7 +2,6 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 from app import create_app
 
@@ -39,16 +38,20 @@ class ApiTests(unittest.TestCase):
         self.assertIn(b"Waiting for the iRacing simulator", response.data)
         self.assertIn(b"Edit Driver Lists", response.data)
         self.assertIn(b"Edit Track List", response.data)
-        self.assertIn(b"Download Demo Replay", response.data)
+        self.assertNotIn(b"Download Demo Replay", response.data)
         self.assertNotIn(b"Paste qualifying order", response.data)
         self.assertNotIn(b"Upload result file", response.data)
         self.assertNotIn(b"Connect iRacing", response.data)
+        self.assertNotIn(b"Demo replay", response.data)
 
     def test_removed_online_and_manual_routes_are_unavailable(self):
         self.assertEqual(self.client.get("/auth/login").status_code, 404)
         self.assertEqual(self.client.post("/api/field/select", json={}).status_code, 404)
         self.assertEqual(self.client.post("/api/field/from-file").status_code, 404)
         self.assertEqual(self.client.post("/api/field/from-iracing", json={}).status_code, 404)
+        self.assertEqual(self.client.get("/api/demo-replay").status_code, 404)
+        self.assertEqual(self.client.post("/api/demo-replay/download").status_code, 404)
+        self.assertEqual(self.client.post("/api/demo-replay/open-iracing").status_code, 404)
 
     def test_roster_is_loaded(self):
         response = self.client.get("/api/roster")
@@ -111,40 +114,6 @@ class ApiTests(unittest.TestCase):
             self.assertEqual(response.status_code, 400)
             self.assertIn("Duplicate Track ID", response.get_json()["error"])
 
-    def test_demo_replay_status_and_download(self):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            destination = Path(temp_dir) / "testapiqslice.rpy"
-            client = create_app({
-                "TESTING": True,
-                "REPLAY_URL": "https://estesl2l.com/private/testapiqslice.rpy",
-                "REPLAY_DESTINATION": str(destination),
-            }).test_client()
-            status = client.get("/api/demo-replay").get_json()
-            self.assertTrue(status["configured"])
-            self.assertFalse(status["installed"])
-            with patch("app.download_replay", return_value={
-                "downloaded": True,
-                "already_installed": False,
-                "destination": str(destination),
-                "bytes": 298453960,
-            }) as downloader:
-                response = client.post("/api/demo-replay/download")
-            self.assertEqual(response.status_code, 200)
-            self.assertTrue(response.get_json()["saved"])
-            downloader.assert_called_once()
-
-    def test_demo_replay_download_requires_build_url(self):
-        client = create_app({"TESTING": True, "REPLAY_URL": ""}).test_client()
-        response = client.post("/api/demo-replay/download")
-        self.assertEqual(response.status_code, 404)
-        self.assertIn("does not have", response.get_json()["error"])
-
-    def test_demo_replay_can_request_iracing_ui_open(self):
-        with patch("app.open_iracing") as opener:
-            response = self.client.post("/api/demo-replay/open-iracing")
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.get_json()["opened"])
-        opener.assert_called_once_with()
 
     def test_overlay_pages_are_available(self):
         overlay = self.client.get("/overlay")

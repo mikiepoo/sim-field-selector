@@ -1,11 +1,9 @@
 #define MyAppName "Sim Field Selector"
-#define MyAppVersion "1.0.2"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Sim Field Selector"
 #define ProjectRoot AddBackslash(SourcePath) + ".."
 #define AppSource ProjectRoot + "\dist\SimFieldSelector"
-#include ProjectRoot + "\build\demo_config\installer_defines.iss"
-#define DemoConfigSource ProjectRoot + "\build\demo_config\demo_replay_private.json"
-#define BlankDemoConfigSource ProjectRoot + "\build\demo_config\demo_replay.json"
+#define AIRosterSource ProjectRoot + "\packaging\ai-demo-roster\roster.json"
 
 [Setup]
 AppId={{76DFEE6F-9583-4D02-912E-D29025323CBD}
@@ -29,24 +27,23 @@ RestartApplications=no
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Additional shortcuts:"; Flags: checkedonce
-#if DemoAvailable
-Name: "demoreplay"; Description: "Enable the downloadable iRacing demo replay"; GroupDescription: "Optional demonstration:"; Flags: checkedonce
-#endif
+Name: "aidemo"; Description: "Install the AI qualifying demo roster and how-to guide"; GroupDescription: "Optional demonstration:"; Flags: checkedonce
 
 [Files]
 Source: "{#AppSource}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#ProjectRoot}\packaging\DEMO-README.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BlankDemoConfigSource}"; DestDir: "{app}"; DestName: "demo_replay.json"; Flags: ignoreversion
-#if DemoAvailable
-Source: "{#DemoConfigSource}"; DestDir: "{app}"; DestName: "demo_replay.json"; Tasks: demoreplay; Flags: ignoreversion
-#endif
+Source: "{#ProjectRoot}\packaging\AI-DEMO-GUIDE.html"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#AIRosterSource}"; DestDir: "{userdocs}\iRacing\airosters\Sim Field Selector Demo"; DestName: "roster.json"; Tasks: aidemo; Flags: onlyifdoesntexist uninsneveruninstall
+
+[InstallDelete]
+Type: files; Name: "{app}\demo_replay.json"
+Type: files; Name: "{app}\_internal\demo_replay.json"
+Type: files; Name: "{app}\DEMO-README.txt"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\SimFieldSelector.exe"
-#if DemoAvailable
-Name: "{group}\Demo Instructions"; Filename: "{app}\DEMO-README.txt"; Tasks: demoreplay
-#endif
+Name: "{group}\AI Demo Guide"; Filename: "{app}\AI-DEMO-GUIDE.html"; Tasks: aidemo
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\SimFieldSelector.exe"; Tasks: desktopicon
 
 [Run]
+Filename: "{app}\AI-DEMO-GUIDE.html"; Description: "Open the AI demo guide"; Tasks: aidemo; Flags: shellexec skipifsilent
 Filename: "{app}\SimFieldSelector.exe"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent
